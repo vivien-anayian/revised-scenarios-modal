@@ -1,4 +1,5 @@
 import { ProgressStage } from '../ProgressScreen';
+import { Sparkles } from 'lucide-react';
 
 interface ProgressOptionAProps {
   progress: number;
@@ -18,54 +19,47 @@ export function ProgressOptionA({ progress, currentStage }: ProgressOptionAProps
     { label: 'Free Rent', value: '3 months', stage: 85 },
   ];
 
-  const scanLinePosition = Math.min(progress * 3.6, 360); // Scan line moves across document
+  // Scan line position for potential future use
+  // const scanLinePosition = Math.min(progress * 3.6, 360);
 
   return (
     <div className="space-y-4">
-      {/* Document Preview with Scan Line */}
-      <div className="relative bg-gradient-to-br from-[#f8f9fa] to-[#f0f1f2] rounded-lg border border-[#e5e7eb] overflow-hidden">
-        {/* Document Lines */}
-        <div className="p-6 space-y-2">
-          {Array.from({ length: 12 }).map((_, i) => (
-            <div key={i} className="flex gap-2">
-              <div 
-                className="h-2 rounded-full bg-[#e5e7eb]"
-                style={{ 
-                  width: `${Math.random() * 30 + 60}%`,
-                  opacity: scanLinePosition > (i * 30) ? 0.3 : 1
-                }}
-              />
-              {Math.random() > 0.3 && (
-                <div 
-                  className="h-2 rounded-full bg-[#e5e7eb]"
-                  style={{ 
-                    width: `${Math.random() * 20 + 20}%`,
-                    opacity: scanLinePosition > (i * 30) ? 0.3 : 1
-                  }}
-                />
-              )}
+      {/* Animated Document Icon with Scanning Effect */}
+      <div className="flex items-center justify-center py-4">
+        <div className="relative w-16 h-20">
+          {/* Document base container */}
+          <div className="absolute inset-0 bg-gradient-to-br from-[#c928ff]/10 to-[#8B28FF]/10 rounded-lg border-2 border-[#c928ff]/30">
+            
+            {/* Document text lines */}
+            <div className="absolute top-3 left-3 right-3 space-y-1.5">
+              <div className="h-1 bg-[#c928ff]/20 rounded" />
+              <div className="h-1 bg-[#c928ff]/20 rounded w-4/5" />
+              <div className="h-1 bg-[#c928ff]/20 rounded" />
+              <div className="h-1 bg-[#c928ff]/20 rounded w-3/5" />
             </div>
-          ))}
+            
+            {/* Scanning line - moves top to bottom */}
+            <div className="scanning-line absolute left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-[#c928ff] to-transparent" />
+            
+            {/* Sparkle particles - 3 particles at different positions */}
+            <div className="sparkle-particle sparkle-1 absolute" style={{ width: '10px', height: '10px', opacity: 0 }}>
+              <Sparkles className="w-full h-full opacity-25 text-[#c928ff]" />
+            </div>
+            <div className="sparkle-particle sparkle-2 absolute" style={{ width: '10px', height: '10px', opacity: 0 }}>
+              <Sparkles className="w-full h-full opacity-25 text-[#c928ff]" />
+            </div>
+            <div className="sparkle-particle sparkle-3 absolute" style={{ width: '10px', height: '10px', opacity: 0 }}>
+              <Sparkles className="w-full h-full opacity-25 text-[#c928ff]" />
+            </div>
+          </div>
+          
+          {/* Progress percentage badge */}
+          <div className="absolute -top-2 -right-2 bg-gradient-to-br from-[#c928ff] to-[#8B28FF] rounded-full w-8 h-8 flex items-center justify-center shadow-lg">
+            <span className="font-['Inter',sans-serif] font-semibold text-white text-[10px]">
+              {Math.round(progress)}%
+            </span>
+          </div>
         </div>
-
-        {/* AI Scan Line */}
-        <div 
-          className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-transparent via-[#4837b9] to-transparent transition-all duration-300"
-          style={{ 
-            transform: `translateY(${(progress / 100) * 100}%)`,
-            opacity: progress < 100 ? 1 : 0
-          }}
-        >
-          <div className="absolute inset-0 bg-[#4837b9] blur-md opacity-50" />
-        </div>
-
-        {/* Scanning overlay */}
-        {progress < 100 && (
-          <div 
-            className="absolute top-0 left-0 right-0 bg-gradient-to-b from-[#4837b9]/5 to-transparent transition-all duration-300"
-            style={{ height: `${progress}%` }}
-          />
-        )}
       </div>
 
       {/* Extracted Data Feed */}
@@ -103,6 +97,66 @@ export function ProgressOptionA({ progress, currentStage }: ProgressOptionAProps
         <p className="text-[12px] text-[#72777e]">{currentStage.label}</p>
         <p className="text-[12px] text-[#1d1e20]">{Math.round(progress)}%</p>
       </div>
+
+      <style>{`
+        @keyframes scan {
+          0% {
+            top: 0;
+            opacity: 0;
+          }
+          10% {
+            opacity: 1;
+          }
+          90% {
+            opacity: 1;
+          }
+          100% {
+            top: 100%;
+            opacity: 0;
+          }
+        }
+
+        @keyframes sparkle {
+          0% {
+            opacity: 0;
+            transform: scale(0) translateY(0);
+          }
+          50% {
+            opacity: 0.25;
+            transform: scale(1) translateY(-8px);
+          }
+          100% {
+            opacity: 0;
+            transform: scale(0) translateY(0);
+          }
+        }
+
+        .scanning-line {
+          animation: scan 3.5s ease-in-out infinite;
+        }
+
+        .sparkle-particle {
+          animation: sparkle 4.5s ease-in-out infinite;
+        }
+
+        .sparkle-1 {
+          top: 20%;
+          right: 10%;
+          animation-delay: 0s;
+        }
+
+        .sparkle-2 {
+          top: 50%;
+          right: 15%;
+          animation-delay: 1.5s;
+        }
+
+        .sparkle-3 {
+          top: 70%;
+          right: 8%;
+          animation-delay: 3s;
+        }
+      `}</style>
     </div>
   );
 }

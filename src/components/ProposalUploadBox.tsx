@@ -1,4 +1,5 @@
 import { useState, useRef } from 'react';
+import { Sparkles as LucideSparkles } from 'lucide-react';
 import uploadIcon from 'figma:asset/62d004828f18c84cb040a5e8733eb7a4fc50c442.png';
 import { SparklesIcon } from './SparklesIcon';
 
@@ -201,15 +202,15 @@ export function ProposalUploadBox({ onComplete }: ProposalUploadBoxProps) {
                       {/* Scanning line animation */}
                       <div className="scanning-line absolute left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-[#c928ff] to-transparent" />
                       
-                      {/* Sparkle particles */}
-                      <div className="sparkle-particle sparkle-1 absolute" style={{ width: '10px', height: '10px', opacity: 0 }}>
-                        <SparklesIcon className="w-full h-full opacity-25" />
+                      {/* Sparkle particles - matching original visual: ~25% final opacity */}
+                      <div className="sparkle-particle sparkle-1 absolute opacity-0">
+                        <LucideSparkles className="w-full h-full text-[#c928ff]" />
                       </div>
-                      <div className="sparkle-particle sparkle-2 absolute" style={{ width: '10px', height: '10px', opacity: 0 }}>
-                        <SparklesIcon className="w-full h-full opacity-25" />
+                      <div className="sparkle-particle sparkle-2 absolute opacity-0">
+                        <LucideSparkles className="w-full h-full text-[#c928ff]" />
                       </div>
-                      <div className="sparkle-particle sparkle-3 absolute" style={{ width: '10px', height: '10px', opacity: 0 }}>
-                        <SparklesIcon className="w-full h-full opacity-25" />
+                      <div className="sparkle-particle sparkle-3 absolute opacity-0">
+                        <LucideSparkles className="w-full h-full text-[#c928ff]" />
                       </div>
                     </div>
                     
@@ -357,6 +358,7 @@ export function ProposalUploadBox({ onComplete }: ProposalUploadBoxProps) {
         }
 
         /* Sparkle particles animation */
+        /* Sparkle animation - EXACT per guide: max 0.25 opacity */
         @keyframes sparkle {
           0% {
             opacity: 0;
@@ -373,25 +375,35 @@ export function ProposalUploadBox({ onComplete }: ProposalUploadBoxProps) {
         }
 
         .sparkle-particle {
-          animation: sparkle 4.5s ease-in-out infinite;
+          animation: sparkle 4.5s ease-in-out infinite forwards;
+          opacity: 0;
         }
 
+        /* Sparkle 1 - medium size, top right */
         .sparkle-1 {
-          top: 20%;
-          right: 10%;
+          top: 35%;
+          right: -15px;
+          width: 20px;
+          height: 20px;
           animation-delay: 0s;
         }
 
+        /* Sparkle 2 - large size, middle right */
         .sparkle-2 {
-          top: 50%;
-          right: 15%;
-          animation-delay: 1.5s;
+          top: 55%;
+          right: -20px;
+          width: 28px;
+          height: 28px;
+          animation-delay: 1.2s;
         }
 
+        /* Sparkle 3 - largest, bottom */
         .sparkle-3 {
-          top: 70%;
-          right: 8%;
-          animation-delay: 3s;
+          top: 75%;
+          right: -8px;
+          width: 24px;
+          height: 24px;
+          animation-delay: 2.4s;
         }
 
         /* ChatGPT-style loading dots - sequential wave animation */
