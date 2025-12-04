@@ -341,37 +341,40 @@ export function ProposalUploadBox({ onComplete }: ProposalUploadBoxProps) {
       <style>{`
         @keyframes floatIn {
           0% {
-            transform: translate(-120px, -20px) rotate(-8deg) scale(0.9);
+            /* Start: bottom-right, underneath Upload button, tilted */
+            transform: translate3d(100px, 80px, 0) rotate(12deg) scale(0.7);
             opacity: 0;
           }
-          25% {
-            transform: translate(-60px, -10px) rotate(-4deg) scale(0.95);
-            opacity: 0.8;
-          }
-          40% {
-            transform: translate(-10px, -2px) rotate(-1deg) scale(1);
+          35% {
+            /* Rising: swing up and left, approaching target, straightening */
+            transform: translate3d(20px, 12px, 0) rotate(2deg) scale(0.95);
             opacity: 1;
           }
           50% {
-            transform: translate(0, 0) rotate(0deg) scale(1);
+            /* Arrive: at target, fully straight */
+            transform: translate3d(0, 0, 0) rotate(0deg) scale(1);
             opacity: 1;
+          }
+          55% {
+            /* Immediately start vanishing */
+            transform: translate3d(0, 0, 0) rotate(0deg) scale(0.7);
+            opacity: 0.7;
           }
           70% {
-            transform: translate(0, 0) rotate(0deg) scale(1);
-            opacity: 1;
-          }
-          85% {
-            transform: translate(0, 0) rotate(0deg) scale(0.5);
-            opacity: 0.5;
+            /* Vanishing */
+            transform: translate3d(0, 0, 0) rotate(0deg) scale(0.2);
+            opacity: 0.2;
           }
           100% {
-            transform: translate(0, 0) rotate(0deg) scale(0);
+            /* Reset for loop - invisible */
+            transform: translate3d(100px, 80px, 0) rotate(12deg) scale(0);
             opacity: 0;
           }
         }
         
         .doc-float-in {
-          animation: floatIn 5s ease-in-out infinite;
+          animation: floatIn 7s cubic-bezier(0.34, 1.56, 0.64, 1) infinite;
+          will-change: transform, opacity;
         }
 
         @keyframes gradientShift {
@@ -458,32 +461,32 @@ export function ProposalUploadBox({ onComplete }: ProposalUploadBoxProps) {
           animation: gradientBackground 8s ease-in-out infinite;
         }
 
-        /* Synced gradient for target box - appears only when file flies over it */
-        /* File animation: 5s cycle, file is at target from 40-70% (2s-3.5s) */
+        /* Synced gradient for target box - appears when file approaches */
+        /* File: approaches 35-50%, lands at 50%, vanishes 55-70% */
         @keyframes targetGradientSync {
           0% {
             background: transparent;
             opacity: 0;
           }
-          35% {
+          40% {
             background: transparent;
             opacity: 0;
           }
-          40% {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0) 0%, rgba(214, 166, 255, 0.08) 25%, rgba(235, 211, 255, 0.12) 50%, rgba(214, 166, 255, 0.08) 75%, rgba(255, 255, 255, 0) 100%);
+          45% {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0) 0%, rgba(214, 166, 255, 0.1) 25%, rgba(235, 211, 255, 0.15) 50%, rgba(214, 166, 255, 0.1) 75%, rgba(255, 255, 255, 0) 100%);
             opacity: 1;
           }
           50% {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0) 0%, rgba(201, 40, 255, 0.15) 25%, rgba(214, 166, 255, 0.3) 50%, rgba(201, 40, 255, 0.15) 75%, rgba(255, 255, 255, 0) 100%);
+            opacity: 1;
+          }
+          55% {
             background: linear-gradient(135deg, rgba(255, 255, 255, 0) 0%, rgba(201, 40, 255, 0.12) 25%, rgba(214, 166, 255, 0.25) 50%, rgba(201, 40, 255, 0.12) 75%, rgba(255, 255, 255, 0) 100%);
             opacity: 1;
           }
-          60% {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0) 0%, rgba(214, 166, 255, 0.15) 25%, rgba(235, 211, 255, 0.22) 50%, rgba(214, 166, 255, 0.15) 75%, rgba(255, 255, 255, 0) 100%);
-            opacity: 1;
-          }
-          70% {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0) 0%, rgba(214, 166, 255, 0.08) 25%, rgba(235, 211, 255, 0.12) 50%, rgba(214, 166, 255, 0.08) 75%, rgba(255, 255, 255, 0) 100%);
-            opacity: 1;
+          65% {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0) 0%, rgba(214, 166, 255, 0.05) 25%, rgba(235, 211, 255, 0.08) 50%, rgba(214, 166, 255, 0.05) 75%, rgba(255, 255, 255, 0) 100%);
+            opacity: 0.5;
           }
           75% {
             background: transparent;
@@ -496,36 +499,37 @@ export function ProposalUploadBox({ onComplete }: ProposalUploadBoxProps) {
         }
 
         .target-hover-gradient {
-          animation: targetGradientSync 5s ease-in-out infinite;
+          animation: targetGradientSync 7s ease-in-out infinite;
         }
 
         /* Target box border color and scale animation - synced with file landing */
+        /* File: approaches 35-50%, lands at 50%, vanishes 55-70% */
         @keyframes targetBoxActivation {
           0% {
             border-color: #d6d8db;
             transform: scale(1);
           }
-          35% {
+          40% {
             border-color: #d6d8db;
             transform: scale(1);
           }
-          40% {
-            border-color: rgba(201, 40, 255, 0.5);
-            transform: scale(1.05);
+          45% {
+            border-color: rgba(201, 40, 255, 0.4);
+            transform: scale(1.08);
           }
           50% {
             border-color: #c928ff;
             transform: scale(1.2);
           }
-          70% {
+          55% {
             border-color: #c928ff;
-            transform: scale(1.2);
+            transform: scale(1.18);
+          }
+          65% {
+            border-color: rgba(201, 40, 255, 0.3);
+            transform: scale(1.05);
           }
           75% {
-            border-color: rgba(201, 40, 255, 0.5);
-            transform: scale(1.1);
-          }
-          85% {
             border-color: #d6d8db;
             transform: scale(1);
           }
@@ -536,7 +540,7 @@ export function ProposalUploadBox({ onComplete }: ProposalUploadBoxProps) {
         }
 
         .target-box-animation {
-          animation: targetBoxActivation 5s ease-in-out infinite;
+          animation: targetBoxActivation 7s ease-in-out infinite;
         }
 
         /* Scanning line animation */
