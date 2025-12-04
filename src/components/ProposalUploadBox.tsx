@@ -9,42 +9,6 @@ interface ProposalUploadBoxProps {
 
 type UploadState = 'idle' | 'processing';
 
-// Custom cursor: purple gradient LOI document icon - 64x64px
-const LOI_CURSOR_64 = `data:image/svg+xml;base64,${btoa(`
-<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <defs>
-    <linearGradient id="purpleGradient64" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" style="stop-color:#c928ff;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#8b28ff;stop-opacity:1" />
-    </linearGradient>
-  </defs>
-  <!-- Document shape -->
-  <path d="M16 8C14.8954 8 14 8.89543 14 10V54C14 55.1046 14.8954 56 16 56H48C49.1046 56 50 55.1046 50 54V20.8284C50 20.298 49.7893 19.7893 49.4142 19.4142L38.5858 8.58579C38.2107 8.21071 37.702 8 37.1716 8H16Z" fill="url(#purpleGradient64)" stroke="#8b28ff" stroke-width="1"/>
-  <!-- Corner fold -->
-  <path d="M38 8V18C38 19.1046 38.8954 20 40 20H50" fill="#a028d0" stroke="#8b28ff" stroke-width="1"/>
-  <!-- LOI text -->
-  <text x="32" y="38" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="white" text-anchor="middle">LOI</text>
-</svg>
-`)}`;
-
-// Custom cursor: purple gradient LOI document icon - 32x32px fallback
-const LOI_CURSOR_32 = `data:image/svg+xml;base64,${btoa(`
-<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <defs>
-    <linearGradient id="purpleGradient32" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" style="stop-color:#c928ff;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#8b28ff;stop-opacity:1" />
-    </linearGradient>
-  </defs>
-  <!-- Document shape -->
-  <path d="M8 4C7.44772 4 7 4.44772 7 5V27C7 27.5523 7.44772 28 8 28H24C24.5523 28 25 27.5523 25 27V10.4142C25 10.149 24.8946 9.89464 24.7071 9.70711L19.2929 4.29289C19.1054 4.10536 18.851 4 18.5858 4H8Z" fill="url(#purpleGradient32)" stroke="#8b28ff" stroke-width="0.5"/>
-  <!-- Corner fold -->
-  <path d="M19 4V9C19 9.55228 19.4477 10 20 10H25" fill="#a028d0" stroke="#8b28ff" stroke-width="0.5"/>
-  <!-- LOI text -->
-  <text x="16" y="20" font-family="Arial, sans-serif" font-size="7" font-weight="bold" fill="white" text-anchor="middle">LOI</text>
-</svg>
-`)}`;
-
 const processingStages = [
   { label: 'Uploading document', progress: 0 },
   { label: 'Preparing file for AI extraction', progress: 15 },
@@ -62,7 +26,9 @@ export function ProposalUploadBox({ onComplete }: ProposalUploadBoxProps) {
   const [currentStageIndex, setCurrentStageIndex] = useState(0);
   const [_fileName, setFileName] = useState('');
   const [showConfetti, setShowConfetti] = useState(false);
+  const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const dropZoneRef = useRef<HTMLDivElement>(null);
 
   const handleDragEnter = (e: React.DragEvent) => {
     e.preventDefault();
@@ -75,12 +41,25 @@ export function ProposalUploadBox({ onComplete }: ProposalUploadBoxProps) {
     e.preventDefault();
     if (uploadState === 'idle') {
       setIsDragging(true);
+      // Track cursor position relative to drop zone
+      if (dropZoneRef.current) {
+        const rect = dropZoneRef.current.getBoundingClientRect();
+        setCursorPos({
+          x: e.clientX - rect.left,
+          y: e.clientY - rect.top
+        });
+      }
     }
   };
 
   const handleDragLeave = (e: React.DragEvent) => {
     e.preventDefault();
-    setIsDragging(false);
+    // Only set isDragging to false if we're actually leaving the container
+    // (not just moving to a child element)
+    const relatedTarget = e.relatedTarget as Node | null;
+    if (!relatedTarget || !e.currentTarget.contains(relatedTarget)) {
+      setIsDragging(false);
+    }
   };
 
   const handleDrop = (e: React.DragEvent) => {
@@ -176,6 +155,7 @@ export function ProposalUploadBox({ onComplete }: ProposalUploadBoxProps) {
 
       {/* Upload Box */}
       <div 
+        ref={dropZoneRef}
         className={`relative border-2 border-dashed rounded-[16px] overflow-hidden transition-transform duration-300 ease-out ${
           uploadState === 'idle'
             ? isDragging
@@ -183,7 +163,6 @@ export function ProposalUploadBox({ onComplete }: ProposalUploadBoxProps) {
               : 'border-[#d6a6ff] hover:border-[#c928ff]'
             : 'border-[#d6d8db] bg-white'
         }`}
-        style={uploadState === 'idle' && isDragging ? { cursor: `url("${LOI_CURSOR_64}") 0 0, url("${LOI_CURSOR_32}") 0 0, pointer` } : {}}
         onDragEnter={handleDragEnter}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
@@ -206,6 +185,30 @@ export function ProposalUploadBox({ onComplete }: ProposalUploadBoxProps) {
             <div className="confetti-particle confetti-11" style={{ position: 'absolute', width: '6px', height: '6px', background: '#8b28ff', borderRadius: '50%' }} />
             <div className="confetti-particle confetti-12" style={{ position: 'absolute', width: '8px', height: '8px', background: '#c928ff', borderRadius: '50%' }} />
           </>
+        )}
+
+        {/* Floating LOI indicator near cursor */}
+        {uploadState === 'idle' && isDragging && (
+          <div 
+            className="absolute pointer-events-none z-50"
+            style={{ 
+              left: cursorPos.x - 24 - 48,  // 24px left of cursor, minus icon width (48px)
+              top: cursorPos.y - 8 - 60,    // 8px above cursor, minus icon height (60px)
+              filter: 'drop-shadow(0 4px 12px rgba(201, 40, 255, 0.5))'
+            }}
+          >
+            <svg width="48" height="60" viewBox="0 0 38 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="loiCursorGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" style={{ stopColor: '#c928ff', stopOpacity: 1 }} />
+                  <stop offset="100%" style={{ stopColor: '#8b28ff', stopOpacity: 1 }} />
+                </linearGradient>
+              </defs>
+              <path d="M8 2C6.89543 2 6 2.89543 6 4V44C6 45.1046 6.89543 46 8 46H30C31.1046 46 32 45.1046 32 44V12.4142C32 11.8839 31.7893 11.3757 31.4142 11.0007L23.5858 3.17157C23.2107 2.79643 22.702 2.58579 22.1716 2.58579L8 2Z" fill="url(#loiCursorGradient)" stroke="#8b28ff" strokeWidth="1.5"/>
+              <path d="M23 2.58579V11C23 12.1046 23.8954 13 25 13H32" fill="#a028d0" stroke="#8b28ff" strokeWidth="1.5"/>
+              <text x="19" y="30" fontFamily="Arial, sans-serif" fontSize="11" fontWeight="bold" fill="white" textAnchor="middle">LOI</text>
+            </svg>
+          </div>
         )}
 
         {/* Animated gradient background layer */}
