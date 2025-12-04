@@ -416,7 +416,6 @@ export function ProposalUploadBox({ onComplete }: ProposalUploadBoxProps) {
           background-size: 200% 200%;
           animation: 
             gradientShift 3s ease 5,
-            buttonPulse 2s ease-in-out 5,
             buttonGlow 2s ease-in-out 5;
           transition: transform 0.2s ease;
         }
