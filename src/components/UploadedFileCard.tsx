@@ -109,12 +109,12 @@ export function UploadedFileCard({ fileName, onDelete }: UploadedFileCardProps) 
             <div className="h-[32px] relative shrink-0">
               <div className="bg-clip-padding border-0 border-[transparent] border-solid box-border content-stretch flex flex-col h-[32px] items-start relative">
                 <div className="h-[18px] relative shrink-0 w-full">
-                  <p className="absolute font-['Inter:Semi_Bold',sans-serif] font-semibold leading-[18px] left-0 not-italic text-[#1d1e20] text-[13px] text-nowrap top-0 whitespace-pre">
+                  <p className="absolute font-['Inter:Semi_Bold',sans-serif] font-semibold leading-[20px] left-0 not-italic text-[#1d1e20] text-[14px] text-nowrap top-0 whitespace-pre">
                     55 Total Fields
                   </p>
                 </div>
-                <div className="h-[14px] relative shrink-0 w-full">
-                  <p className="absolute font-['Inter:Regular',sans-serif] font-normal leading-[14px] left-0 not-italic text-[#72777e] text-[10px] text-nowrap top-0 whitespace-pre">
+                <div className="h-[16px] relative shrink-0 w-full">
+                  <p className="absolute font-['Inter:Regular',sans-serif] font-normal leading-[16px] left-0 not-italic text-[#72777e] text-[12px] text-nowrap top-0 whitespace-pre">
                     Found and filled
                   </p>
                 </div>
@@ -135,12 +135,12 @@ export function UploadedFileCard({ fileName, onDelete }: UploadedFileCardProps) 
             <div className="h-[32px] relative shrink-0">
               <div className="bg-clip-padding border-0 border-[transparent] border-solid box-border content-stretch flex flex-col h-[32px] items-start relative">
                 <div className="h-[18px] relative shrink-0 w-full">
-                  <p className="absolute font-['Inter:Semi_Bold',sans-serif] font-semibold leading-[18px] left-0 not-italic text-[#1d1e20] text-[13px] text-nowrap top-0 whitespace-pre">
+                  <p className="absolute font-['Inter:Semi_Bold',sans-serif] font-semibold leading-[20px] left-0 not-italic text-[#1d1e20] text-[14px] text-nowrap top-0 whitespace-pre">
                     36 Economic Fields
                   </p>
                 </div>
-                <div className="h-[14px] relative shrink-0 w-full">
-                  <p className="absolute font-['Inter:Regular',sans-serif] font-normal leading-[14px] left-0 not-italic text-[#72777e] text-[10px] text-nowrap top-0 whitespace-pre">
+                <div className="h-[16px] relative shrink-0 w-full">
+                  <p className="absolute font-['Inter:Regular',sans-serif] font-normal leading-[16px] left-0 not-italic text-[#72777e] text-[12px] text-nowrap top-0 whitespace-pre">
                     Found and filled
                   </p>
                 </div>
@@ -161,12 +161,12 @@ export function UploadedFileCard({ fileName, onDelete }: UploadedFileCardProps) 
             <div className="h-[32px] relative shrink-0">
               <div className="bg-clip-padding border-0 border-[transparent] border-solid box-border content-stretch flex flex-col h-[32px] items-start relative">
                 <div className="h-[18px] relative shrink-0 w-full">
-                  <p className="absolute font-['Inter:Semi_Bold',sans-serif] font-semibold leading-[18px] left-0 not-italic text-[#1d1e20] text-[13px] text-nowrap top-0 whitespace-pre">
+                  <p className="absolute font-['Inter:Semi_Bold',sans-serif] font-semibold leading-[20px] left-0 not-italic text-[#1d1e20] text-[14px] text-nowrap top-0 whitespace-pre">
                     3 Options
                   </p>
                 </div>
-                <div className="h-[14px] relative shrink-0 w-full">
-                  <p className="absolute font-['Inter:Regular',sans-serif] font-normal leading-[14px] left-0 not-italic text-[#72777e] text-[10px] text-nowrap top-0 whitespace-pre">
+                <div className="h-[16px] relative shrink-0 w-full">
+                  <p className="absolute font-['Inter:Regular',sans-serif] font-normal leading-[16px] left-0 not-italic text-[#72777e] text-[12px] text-nowrap top-0 whitespace-pre">
                     Found and filled
                   </p>
                 </div>

@@ -151,11 +151,11 @@ export default function App() {
                   <div className="box-border content-stretch flex gap-[10px] items-start px-0 py-[2px] shrink-0">
                     <div className="relative shrink-0 size-[18px]">
                       <svg className="block size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 18 18">
-                        <path d={svgPathsWarning.p3e30a100} fill="#1D1E20" />
+                        <path d={svgPathsWarning.p3e30a100} fill="#72777e" />
                       </svg>
                     </div>
                   </div>
-                  <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] not-italic text-[#1d1e20] text-[14px]">
+                  <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] not-italic text-[#72777e] text-[14px]">
                     AI responses aren't always perfect. Please verify key details.
                   </p>
                 </div>
