@@ -291,13 +291,13 @@ export function ProposalUploadBox({ onComplete }: ProposalUploadBoxProps) {
                       
                       {/* Sparkle particles */}
                       <div className="sparkle-particle sparkle-1 absolute opacity-0" style={{ width: '20px', height: '20px', top: '35%', right: '-15px' }}>
-                        <LucideSparkles className="w-full h-full text-[#c928ff]" />
+                        <LucideSparkles className="w-full h-full text-[#8822AA]" />
                       </div>
                       <div className="sparkle-particle sparkle-2 absolute opacity-0" style={{ width: '28px', height: '28px', top: '55%', right: '-20px', animationDelay: '1.2s' }}>
-                        <LucideSparkles className="w-full h-full text-[#c928ff]" />
+                        <LucideSparkles className="w-full h-full text-[#8822AA]" />
                       </div>
                       <div className="sparkle-particle sparkle-3 absolute opacity-0" style={{ width: '24px', height: '24px', top: '75%', right: '-8px', animationDelay: '2.4s' }}>
-                        <LucideSparkles className="w-full h-full text-[#c928ff]" />
+                        <LucideSparkles className="w-full h-full text-[#8822AA]" />
                       </div>
                     </div>
                     
