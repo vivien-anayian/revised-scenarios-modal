@@ -1,7 +1,6 @@
 import { useState, useRef } from 'react';
 import uploadIcon from 'figma:asset/62d004828f18c84cb040a5e8733eb7a4fc50c442.png';
 import { SparklesIcon } from './SparklesIcon';
-import { Sparkles as LucideSparkles } from 'lucide-react';
 
 interface ProposalUploadBoxProps {
   onComplete: (fileName: string) => void;
@@ -26,7 +25,6 @@ export function ProposalUploadBox({ onComplete }: ProposalUploadBoxProps) {
   const [currentStageIndex, setCurrentStageIndex] = useState(0);
   const [_fileName, setFileName] = useState('');
   const [showConfetti, setShowConfetti] = useState(false);
-  const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
   const fileInputRef = useRef<HTMLInputElement>(null);
   const dropZoneRef = useRef<HTMLDivElement>(null);
 
@@ -41,14 +39,6 @@ export function ProposalUploadBox({ onComplete }: ProposalUploadBoxProps) {
     e.preventDefault();
     if (uploadState === 'idle') {
       setIsDragging(true);
-      // Track cursor position relative to drop zone
-      if (dropZoneRef.current) {
-        const rect = dropZoneRef.current.getBoundingClientRect();
-        setCursorPos({
-          x: e.clientX - rect.left,
-          y: e.clientY - rect.top
-        });
-      }
     }
   };
 
@@ -187,30 +177,6 @@ export function ProposalUploadBox({ onComplete }: ProposalUploadBoxProps) {
           </>
         )}
 
-        {/* Floating LOI indicator near cursor */}
-        {uploadState === 'idle' && isDragging && (
-          <div 
-            className="absolute pointer-events-none z-50"
-            style={{ 
-              left: cursorPos.x - 24 - 48,  // 24px left of cursor, minus icon width (48px)
-              top: cursorPos.y - 8 - 60,    // 8px above cursor, minus icon height (60px)
-              filter: 'drop-shadow(0 4px 12px rgba(201, 40, 255, 0.5))'
-            }}
-          >
-            <svg width="48" height="60" viewBox="0 0 38 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <defs>
-                <linearGradient id="loiCursorGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                  <stop offset="0%" style={{ stopColor: '#c928ff', stopOpacity: 1 }} />
-                  <stop offset="100%" style={{ stopColor: '#8b28ff', stopOpacity: 1 }} />
-                </linearGradient>
-              </defs>
-              <path d="M8 2C6.89543 2 6 2.89543 6 4V44C6 45.1046 6.89543 46 8 46H30C31.1046 46 32 45.1046 32 44V12.4142C32 11.8839 31.7893 11.3757 31.4142 11.0007L23.5858 3.17157C23.2107 2.79643 22.702 2.58579 22.1716 2.58579L8 2Z" fill="url(#loiCursorGradient)" stroke="#8b28ff" strokeWidth="1.5"/>
-              <path d="M23 2.58579V11C23 12.1046 23.8954 13 25 13H32" fill="#a028d0" stroke="#8b28ff" strokeWidth="1.5"/>
-              <text x="19" y="30" fontFamily="Arial, sans-serif" fontSize="11" fontWeight="bold" fill="white" textAnchor="middle">LOI</text>
-            </svg>
-          </div>
-        )}
-
         {/* Animated gradient background layer */}
         {uploadState === 'idle' && (
           <div 
@@ -292,15 +258,15 @@ export function ProposalUploadBox({ onComplete }: ProposalUploadBoxProps) {
                       {/* Scanning line animation */}
                       <div className="scanning-line absolute left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-[#c928ff] to-transparent" />
                       
-                      {/* Sparkle particles */}
+                      {/* Sparkle particles - using filled SparklesIcon */}
                       <div className="sparkle-particle sparkle-1 absolute opacity-0" style={{ width: '20px', height: '20px', top: '35%', right: '-15px' }}>
-                        <LucideSparkles className="w-full h-full text-[#8822AA]" />
+                        <div className="w-full h-full" style={{ transform: 'scale(0.7)' }}><SparklesIcon /></div>
                       </div>
                       <div className="sparkle-particle sparkle-2 absolute opacity-0" style={{ width: '28px', height: '28px', top: '55%', right: '-20px', animationDelay: '1.2s' }}>
-                        <LucideSparkles className="w-full h-full text-[#8822AA]" />
+                        <div className="w-full h-full" style={{ transform: 'scale(0.95)' }}><SparklesIcon /></div>
                       </div>
                       <div className="sparkle-particle sparkle-3 absolute opacity-0" style={{ width: '24px', height: '24px', top: '75%', right: '-8px', animationDelay: '2.4s' }}>
-                        <LucideSparkles className="w-full h-full text-[#8822AA]" />
+                        <div className="w-full h-full" style={{ transform: 'scale(0.8)' }}><SparklesIcon /></div>
                       </div>
                     </div>
                     
@@ -389,22 +355,13 @@ export function ProposalUploadBox({ onComplete }: ProposalUploadBoxProps) {
           }
         }
 
-        /* Button continuous animations - pulse + shimmer + glow */
+        /* Button continuous animations - gradient shift only */
         @keyframes buttonPulse {
           0%, 100% {
             transform: scale(1);
           }
           50% {
             transform: scale(1.08);
-          }
-        }
-
-        @keyframes buttonGlow {
-          0%, 100% {
-            box-shadow: 0 4px 12px rgba(201, 40, 255, 0.3), 0 0 0 0 rgba(201, 40, 255, 0);
-          }
-          50% {
-            box-shadow: 0 6px 20px rgba(201, 40, 255, 0.5), 0 0 20px 4px rgba(201, 40, 255, 0.2);
           }
         }
 
@@ -420,17 +377,13 @@ export function ProposalUploadBox({ onComplete }: ProposalUploadBoxProps) {
             rgba(24,24,24,1) 100%
           );
           background-size: 200% 200%;
-          animation: 
-            gradientShift 3s ease 5,
-            buttonGlow 2s ease-in-out 5;
+          animation: gradientShift 3s ease 5;
           transition: transform 0.2s ease;
         }
 
         .animated-upload-button:hover {
           transform: scale(1.05) !important;
-          animation: 
-            gradientShift 3s ease 5,
-            buttonGlow 2s ease-in-out 5;
+          animation: gradientShift 3s ease 5;
         }
 
         @keyframes gradientBackground {
